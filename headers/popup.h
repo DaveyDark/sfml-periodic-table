@@ -23,6 +23,7 @@ class Popup{
 
         void render();
         void refresh(nlohmann::json element, sf::Color color);
+        void update();
 };
 
 #endif
