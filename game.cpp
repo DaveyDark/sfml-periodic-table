@@ -21,7 +21,6 @@ void Game::initWindow(){
     this->videoMode.height = this->WINDOW_HEIGHT;
     this->videoMode.width = this->WINDOW_WIDTH;
     this->window = new sf::RenderWindow(this->videoMode,"chem-project",sf::Style::Close);
-    this->popup = nullptr;
 }
 
 const bool Game::isRunning() const{
@@ -41,14 +40,13 @@ void Game::updateMousePos(){
 void Game::pollEvents(){
     while(this->window->pollEvent(this->ev)){
         if(this->ev.type == sf::Event::Closed) this->window->close();
+        else if(this->ev.type == sf::Event::MouseButtonPressed) this->table->onClick(this->mousePos);
+
     }
 }
 
 void Game::render(){
-    if(this->popup != nullptr){
-        //TODO handle popup
-    }
-    this->window->clear(Game::BACKGROUND_COLOR);
+    this->window->clear(this->BACKGROUND_COLOR);
 
     this->table->render(this->window,this->mousePos,this->BACKGROUND_COLOR);
     

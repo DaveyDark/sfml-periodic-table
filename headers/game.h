@@ -6,12 +6,12 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
+#include "popup.h"
 #include "table.h"
 
 class Game{
     private:
         sf::RenderWindow *window;
-        sf::RenderWindow *popup;
         sf::VideoMode videoMode;
         sf::Event ev;
         sf::Vector2f mousePos;

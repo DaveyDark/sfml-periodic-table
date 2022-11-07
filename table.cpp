@@ -1,4 +1,5 @@
 #include "headers/table.h"
+#include "headers/popup.h"
 
 bool contains(std::string s1,std::string s2){
     if(s1.find(s2) != std::string::npos)return true;
@@ -9,27 +10,24 @@ periodicTable::periodicTable(float width,float height){
     std::ifstream fJson("periodic_table.json");
     std::stringstream buffer;
     buffer << fJson.rdbuf();
-    periodicTable::elements = nlohmann::json::parse(buffer.str());
+    this->elements = nlohmann::json::parse(buffer.str());
 
-    periodicTable::elementFont.loadFromFile("assets/UbuntuMono-R.ttf");
-    periodicTable::text.setFont(periodicTable::elementFont);
-    periodicTable::text.setFillColor(sf::Color::Black);
+    this->elementFont.loadFromFile("assets/UbuntuMono-R.ttf");
+    this->text.setFont(this->elementFont);
+    this->text.setFillColor(sf::Color::Black);
 
-    periodicTable::headingFont.loadFromFile("assets/Sauce Code Pro Nerd Font Complete.ttf");
-    periodicTable::heading.setFont(periodicTable::headingFont);
-    periodicTable::heading.setString("Periodic Table");
-    periodicTable::heading.setCharacterSize(128.f);
-    periodicTable::heading.setFillColor(sf::Color::White);
-    periodicTable::heading.setPosition(width / 2 - (periodicTable::heading.getGlobalBounds().width/2), periodicTable::MARGIN_Y/4);
+    this->headingFont.loadFromFile("assets/Sauce Code Pro Nerd Font Complete.ttf");
+    this->heading.setFont(this->headingFont);
+    this->heading.setString("Periodic Table");
+    this->heading.setCharacterSize(128.f);
+    this->heading.setFillColor(sf::Color::White);
+    this->heading.setPosition(width / 2 - (this->heading.getGlobalBounds().width/2), this->MARGIN_Y/4);
+
+    this->popup = nullptr;
+    this->bg = sf::Color::Black;
 }
 
-void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color bg){
-    for(auto element : periodicTable::elements["elements"]){
-        //make rectangle for element
-        sf::RectangleShape rect(sf::Vector2f(periodicTable::SIZE,periodicTable::SIZE));
-        rect.setPosition(periodicTable::MARGIN_X + (((int)element["xpos"]-1)*(periodicTable::SIZE + periodicTable::PADDING)),periodicTable::MARGIN_Y + (((int)element["ypos"]-1)*(periodicTable::SIZE + periodicTable::PADDING)));
-
-        //color coordination
+sf::Color periodicTable::getColor(nlohmann::json element){
         sf::Color color;
         if(contains(element["category"] , "diatomic nonmetal"))color = sf::Color(0, 181, 237);
         else if(contains(element["category"],"alkali metal"))color = sf::Color(217, 101, 96);
@@ -41,6 +39,19 @@ void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color
         else if(contains(element["category"] , "polyatomic nonmetal"))color = sf::Color(0,181,237);
         else if(contains(element["category"] , "post-transition metal"))color = sf::Color(168, 200, 12);
         else if(contains(element["category"] , "transition metal"))color = sf::Color(255, 239, 33);
+
+        return color;
+}
+
+void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color bg){
+    for(auto element : this->elements["elements"]){
+        //make rectangle for element
+        sf::RectangleShape rect(sf::Vector2f(this->SIZE,this->SIZE));
+        rect.setPosition(this->MARGIN_X + (((int)element["xpos"]-1)*(this->SIZE + this->PADDING)),this->MARGIN_Y + (((int)element["ypos"]-1)*(this->SIZE + this->PADDING)));
+
+        //color coordination
+        this->bg = bg;
+        sf::Color color = this->getColor(element); 
         rect.setOutlineColor(color);
         rect.setOutlineThickness(-2.f);
         rect.setFillColor(bg);
@@ -48,42 +59,44 @@ void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color
         /* rect.setFillColor(color); */
 
         //write text
-        periodicTable::text.setString((std::string)element["symbol"]);
-        periodicTable::text.setCharacterSize(24);
-        periodicTable::text.setPosition(rect.getPosition().x + (periodicTable::SIZE/2 - periodicTable::text.getGlobalBounds().width/2),rect.getPosition().y + (periodicTable::SIZE/2 - periodicTable::text.getGlobalBounds().height));
-        /* periodicTable::text.setFillColor(sf::Color::Black); */
-        periodicTable::text.setFillColor(color);
+        this->text.setString((std::string)element["symbol"]);
+        this->text.setCharacterSize(24);
+        this->text.setPosition(rect.getPosition().x + (this->SIZE/2 - this->text.getGlobalBounds().width/2),rect.getPosition().y + (this->SIZE/2 - this->text.getGlobalBounds().height));
+        /* this->text.setFillColor(sf::Color::Black); */
+        this->text.setFillColor(color);
 
         //check hover
-        if(periodicTable::isHovering(mousePos,rect.getPosition(),element)){
+        if(this->isHovering(mousePos,rect.getPosition(),element)){
             /* rect.setOutlineColor(color); */
             /* rect.setOutlineThickness(-2.f); */
             /* rect.setFillColor(bg); */
-            /* periodicTable::text.setFillColor(color); */
+            /* this->text.setFillColor(color); */
             rect.setOutlineThickness(0.f);
             rect.setFillColor(color);
-            periodicTable::text.setFillColor(bg);
+            this->text.setFillColor(bg);
         }
 
         //drawing
         win->draw(rect);
-        win->draw(periodicTable::heading);
-        win->draw(periodicTable::text);
+        win->draw(this->heading);
+        win->draw(this->text);
+        if(this->popup != nullptr)this->popup->render();
     }
 }
 
 void periodicTable::onClick(sf::Vector2f mousePos){
-    for(auto element : periodicTable::elements["elements"]){
-        sf::Vector2f pos = sf::Vector2f(periodicTable::MARGIN_X + (((int)element["xpos"]-1)*(periodicTable::SIZE + periodicTable::PADDING)),periodicTable::MARGIN_Y + (((int)element["ypos"]-1)*(periodicTable::SIZE + periodicTable::PADDING)));
-        if(periodicTable::isHovering(mousePos,pos,element)){
-            //do something
+    for(nlohmann::json element : this->elements["elements"]){
+        sf::Vector2f pos = sf::Vector2f(this->MARGIN_X + (((int)element["xpos"]-1)*(this->SIZE + this->PADDING)),this->MARGIN_Y + (((int)element["ypos"]-1)*(this->SIZE + this->PADDING)));
+        if(this->isHovering(mousePos,pos,element)){
+            if(this->popup == nullptr)this->popup = new Popup(element,this->bg,this->getColor(element));
+            else this->popup->refresh(element,this->getColor(element));
         }
     }
 }
 
 bool periodicTable::isHovering(sf::Vector2f mousePos,sf::Vector2f pos,nlohmann::json element){
-        if(mousePos.x >= pos.x && mousePos.x <= pos.x+periodicTable::SIZE){
-            if(mousePos.y >= pos.y && mousePos.y <= pos.y+periodicTable::SIZE){
+        if(mousePos.x >= pos.x && mousePos.x <= pos.x+this->SIZE){
+            if(mousePos.y >= pos.y && mousePos.y <= pos.y+this->SIZE){
                 return true;
             }
         }

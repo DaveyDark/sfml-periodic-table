@@ -4,8 +4,8 @@ test: run
 run: build
 	./chem-project
 
-build: game.o main.o table.o
-	g++ bin/game.o bin/table.o bin/main.o -o chem-project -lsfml-graphics -lsfml-window -lsfml-system
+build: game.o main.o table.o popup.o
+	g++ bin/game.o bin/popup.o bin/table.o bin/main.o -o chem-project -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o: main.cpp
 	g++ -c main.cpp -o bin/main.o
@@ -15,6 +15,9 @@ game.o: game.cpp
 
 table.o: table.cpp
 	g++ -c table.cpp -o bin/table.o
+
+popup.o: popup.cpp
+	g++ -c popup.cpp -o bin/popup.o
 
 clean:
 	rm bin/*.o chem-project

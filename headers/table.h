@@ -1,3 +1,7 @@
+#ifndef TABLE_H
+#define TABLE_H
+
+#include "popup.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <nlohmann/json.hpp>
@@ -11,8 +15,11 @@ class periodicTable{
         sf::Font headingFont;
         sf::Text text;
         sf::Text heading;
+        sf::Color bg;
+        Popup *popup;
 
         bool isHovering(sf::Vector2f mousePos,sf::Vector2f pos,nlohmann::json element);
+        sf::Color getColor(nlohmann::json element);
     public:
         periodicTable(float width,float height);
         ~periodicTable();
@@ -24,3 +31,4 @@ class periodicTable{
         nlohmann::json elements;
 };
 
+#endif
