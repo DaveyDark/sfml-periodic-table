@@ -17,6 +17,7 @@ class Popup{
         sf::Color color;
         sf::RenderWindow *win;
         sf::Event ev;
+        std::stringstream str;
 
         float WINDOW_WIDTH,WINDOW_HEIGHT;
     public:
