@@ -41,7 +41,7 @@ void Game::pollEvents(){
     while(this->window->pollEvent(this->ev)){
         if(this->ev.type == sf::Event::Closed) this->window->close();
         else if(this->ev.type == sf::Event::MouseButtonPressed) this->table->onClick(this->mousePos);
-
+        else if(this->ev.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))this->table->updateEvents(this->window);
     }
 }
 

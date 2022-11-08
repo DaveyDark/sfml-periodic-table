@@ -25,7 +25,7 @@ class periodicTable{
         ~periodicTable();
 
         void render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color bg);
-        void update(sf::Vector2f mousePos);
+        void updateEvents(sf::RenderWindow *win);
         void onClick(sf::Vector2f mousePos);
 
         nlohmann::json elements;

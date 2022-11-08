@@ -43,6 +43,14 @@ sf::Color periodicTable::getColor(nlohmann::json element){
         return color;
 }
 
+void periodicTable::updateEvents(sf::RenderWindow *win){
+        if(this->popup == nullptr)win->close();
+        else {
+            delete this->popup;
+            this->popup = nullptr;
+        }
+}
+
 void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color bg){
     for(auto element : this->elements["elements"]){
         //make rectangle for element
@@ -80,7 +88,10 @@ void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color
         win->draw(rect);
         win->draw(this->heading);
         win->draw(this->text);
-        if(this->popup != nullptr)this->popup->render();
+        if(this->popup != nullptr){
+            this->popup->render();
+            if(this->popup->update(win) != nullptr)this->updateEvents(win);
+        }
     }
 }
 

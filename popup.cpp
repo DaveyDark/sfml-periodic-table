@@ -55,3 +55,17 @@ void Popup::render(){
     this->win->display();
 }
 
+sf::RenderWindow* Popup::update(sf::RenderWindow *mainWin){
+    while(this->win->pollEvent(this->ev)){
+        if(this->ev.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))return mainWin;
+        if(this->ev.type == sf::Event::Closed)return mainWin;
+    }
+    return nullptr;
+}
+
+Popup::~Popup(){
+    delete this->win;
+}
+
+
+

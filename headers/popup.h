@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
 #include <nlohmann/json.hpp>
 
 class Popup{
@@ -15,6 +16,7 @@ class Popup{
         sf::Color bg;
         sf::Color color;
         sf::RenderWindow *win;
+        sf::Event ev;
 
         float WINDOW_WIDTH,WINDOW_HEIGHT;
     public:
@@ -23,7 +25,7 @@ class Popup{
 
         void render();
         void refresh(nlohmann::json element, sf::Color color);
-        void update();
+        sf::RenderWindow* update(sf::RenderWindow *mainWin);
 };
 
 #endif
