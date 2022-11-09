@@ -5,7 +5,7 @@ run: build
 	./chem-project
 
 build: game.o main.o table.o popup.o
-	g++ bin/game.o bin/popup.o bin/table.o bin/main.o -o chem-project -lsfml-graphics -lsfml-window -lsfml-system
+	g++ bin/game.o bin/popup.o bin/table.o bin/main.o -o chem-project -L./lib/ -lsfml-graphics -lsfml-window -lsfml-system
 
 main.o: main.cpp bin
 	g++ -c main.cpp -o bin/main.o
