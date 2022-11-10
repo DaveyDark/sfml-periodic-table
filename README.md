@@ -14,18 +14,13 @@ Interactive periodic table viewer made with SFML library using C++ for chemistry
 * GCC(or any other compiler)
 
 ## Compilation Instructions (linux):
-*  Make sure all the dependencies are installed
 *  Clone the github repo
   ```sh
   git clone https://github.com/DaveyDark/sfml-periodic-table.git
   cd sfml-periodic-table
   ```
-*  Compile using
+*  Compile and run using
   ```sh
-  make build
+  make run
   ```
-* Run the binary
-```
-./chem-project
-```
 
