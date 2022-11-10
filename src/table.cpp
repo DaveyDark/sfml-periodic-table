@@ -7,16 +7,16 @@ bool contains(std::string s1,std::string s2){
 }
 
 periodicTable::periodicTable(float width,float height){
-    std::ifstream fJson("periodic_table.json");
+    std::ifstream fJson("src/periodic_table.json");
     std::stringstream buffer;
     buffer << fJson.rdbuf();
     this->elements = nlohmann::json::parse(buffer.str());
 
-    this->elementFont.loadFromFile("assets/UbuntuMono-R.ttf");
+    this->elementFont.loadFromFile("src/assets/UbuntuMono-R.ttf");
     this->text.setFont(this->elementFont);
     this->text.setFillColor(sf::Color::Black);
 
-    this->headingFont.loadFromFile("assets/Sauce Code Pro Nerd Font Complete.ttf");
+    this->headingFont.loadFromFile("src/assets/Sauce Code Pro Nerd Font Complete.ttf");
     this->heading.setFont(this->headingFont);
     this->heading.setString("Periodic Table");
     this->heading.setCharacterSize(128.f);

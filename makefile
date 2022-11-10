@@ -2,22 +2,22 @@ test: run
 	rm bin/*
 
 run: build
-	./chem-project
+	export LD_LIBRARY_PATH=lib/ && ./chem-project
 
 build: game.o main.o table.o popup.o
-	g++ bin/game.o bin/popup.o bin/table.o bin/main.o -o chem-project -L./lib/ -lsfml-graphics -lsfml-window -lsfml-system
+	g++ bin/game.o bin/popup.o bin/table.o bin/main.o -o chem-project -L./lib/ -I./include/ -lsfml-graphics -lsfml-window -lsfml-system
 
-main.o: main.cpp bin
-	g++ -c main.cpp -o bin/main.o
+main.o: src/main.cpp bin
+	g++ -c src/main.cpp -o bin/main.o -I./include
 
-game.o: game.cpp bin
-	g++ -c game.cpp -o bin/game.o
+game.o: src/game.cpp bin
+	g++ -c src/game.cpp -o bin/game.o -I./include
 
-table.o: table.cpp bin
-	g++ -c table.cpp -o bin/table.o
+table.o: src/table.cpp bin
+	g++ -c src/table.cpp -o bin/table.o -I./include
 
-popup.o: popup.cpp bin
-	g++ -c popup.cpp -o bin/popup.o
+popup.o: src/popup.cpp bin
+	g++ -c src/popup.cpp -o bin/popup.o -I./include
 
 bin:
 	mkdir -p bin/

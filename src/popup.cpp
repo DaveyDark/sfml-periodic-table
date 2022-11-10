@@ -9,8 +9,8 @@ Popup::Popup(nlohmann::json element,sf::Color bg,sf::Color color){
     this->WINDOW_WIDTH = 480;
     this->WINDOW_HEIGHT = 1000;
 
-    this->headingFont.loadFromFile("assets/Sauce Code Pro Nerd Font Complete.ttf");
-    this->font.loadFromFile("assets/Roboto-Light.ttf");
+    this->headingFont.loadFromFile("src/assets/Sauce Code Pro Nerd Font Complete.ttf");
+    this->font.loadFromFile("src/assets/Roboto-Light.ttf");
     this->text.setFont(this->font);
     this->heading.setString((std::string)element["name"]);
     this->heading.setFont(Popup::headingFont);
