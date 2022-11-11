@@ -14,8 +14,12 @@ class periodicTable{
         sf::Font elementFont;
         sf::Font headingFont;
         sf::Text text;
+        sf::Text numText;
+        std::stringstream stream;
         sf::Text heading;
         sf::Color bg;
+        sf::Text lanthanideText;
+        sf::Text actinideText;
         Popup *popup;
 
         bool isHovering(sf::Vector2f mousePos,sf::Vector2f pos,nlohmann::json element);

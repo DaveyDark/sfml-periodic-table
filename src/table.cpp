@@ -22,6 +22,17 @@ periodicTable::periodicTable(float width,float height){
     this->heading.setCharacterSize(128.f);
     this->heading.setFillColor(sf::Color::White);
     this->heading.setPosition(width / 2 - (this->heading.getGlobalBounds().width/2), this->MARGIN_Y/4);
+    this->numText.setFont(this->elementFont);
+    this->lanthanideText.setFont(this->elementFont);
+    this->lanthanideText.setString("[La]");
+    this->lanthanideText.setCharacterSize(32.f);
+    this->lanthanideText.setFillColor(sf::Color(232, 62, 143));
+    this->lanthanideText.setPosition(this->MARGIN_X + 2*(this->SIZE + this->PADDING),this->MARGIN_Y + 10 + 5*(this->SIZE + this->PADDING));
+    this->actinideText.setFont(this->elementFont);
+    this->actinideText.setString("[Ac]");
+    this->actinideText.setCharacterSize(32.f);
+    this->actinideText.setFillColor(sf::Color(235, 89, 156));
+    this->actinideText.setPosition(this->MARGIN_X + 2*(this->SIZE + this->PADDING),this->MARGIN_Y + 10 + 6*(this->SIZE + this->PADDING));
 
     this->popup = nullptr;
     this->bg = sf::Color::Black;
@@ -73,6 +84,13 @@ void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color
         /* this->text.setFillColor(sf::Color::Black); */
         this->text.setFillColor(color);
 
+        this->stream.str("");
+        this->stream << element["number"];
+        this->numText.setString(this->stream.str());
+        this->numText.setFillColor(color);
+        this->numText.setCharacterSize(12.f);
+        this->numText.setPosition(rect.getPosition().x + rect.getSize().x/2 - this->numText.getGlobalBounds().width/2,rect.getPosition().y + rect.getSize().y/20);
+
         //check hover
         if(this->isHovering(mousePos,rect.getPosition(),element)){
             /* rect.setOutlineColor(color); */
@@ -82,12 +100,15 @@ void periodicTable::render(sf::RenderWindow *win,sf::Vector2f mousePos,sf::Color
             rect.setOutlineThickness(0.f);
             rect.setFillColor(color);
             this->text.setFillColor(bg);
+            this->numText.setFillColor(bg);
         }
-
-        //drawing
         win->draw(rect);
         win->draw(this->heading);
         win->draw(this->text);
+        win->draw(this->numText);
+        win->draw(this->lanthanideText);
+        win->draw(this->actinideText);
+
         if(this->popup != nullptr){
             this->popup->render();
             if(this->popup->update(win) != nullptr)this->updateEvents(win);

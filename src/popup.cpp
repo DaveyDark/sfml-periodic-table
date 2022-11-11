@@ -40,9 +40,9 @@ void Popup::render(){
     rect.setPosition(this->WINDOW_WIDTH/2 - (rect.getSize().x/2),175.f);
     rect.setFillColor(this->color);
     this->text.setCharacterSize(96.f);
-    this->text.setPosition(rect.getPosition().x + (rect.getSize().x/2) - (this->text.getGlobalBounds().width/2),rect.getPosition().y + (rect.getSize().y/2) - (this->text.getGlobalBounds().height));
-    this->text.setFillColor(this->bg);
     this->text.setFont(this->headingFont);
+    this->text.setFillColor(this->bg);
+    this->text.setPosition(rect.getPosition().x + (rect.getSize().x/2) - (this->text.getGlobalBounds().width/2),rect.getPosition().y + (rect.getSize().y/2) - (this->text.getGlobalBounds().height));
     this->win->draw(rect);
     this->win->draw(this->text);
 
